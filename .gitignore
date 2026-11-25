@@ -2,4 +2,3 @@ node_modules/
 .env
 prisma/dev.db
 npm-debug.log*
-public/
