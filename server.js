@@ -3,6 +3,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import path from 'node:path';
 import { PrismaClient, Role, WorkoutStatus } from '@prisma/client';
 
 const app = express();
@@ -10,6 +11,7 @@ const prisma = new PrismaClient();
 const port = Number(process.env.PORT || 3000);
 const isProduction = process.env.NODE_ENV === 'production';
 const sessionCookie = 'elite_session';
+const staticRoot = process.env.VERCEL ? path.join(process.cwd(), 'public') : process.cwd();
 
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
   console.warn('JWT_SECRET is missing or too short. Set a unique 32+ character secret in .env before deployment.');
@@ -417,9 +419,9 @@ app.get('/api/exercises', requireAuth, async (_req, res, next) => {
 
 // Do not expose the repository (schema, .env.example, server source) as static files.
 // Hash navigation keeps all browser routes on '/', so this small allow-list is sufficient.
-app.get(['/', '/index.html'], (_req, res) => res.sendFile('index.html', { root: process.cwd() }));
-app.get(['/app.js', '/styles.css', '/hero-training.png'], (req, res) => res.sendFile(req.path.slice(1), { root: process.cwd(), dotfiles: 'deny' }));
-app.get('/assets/:asset', (req, res) => res.sendFile(`assets/${req.params.asset}`, { root: process.cwd(), dotfiles: 'deny' }));
+app.get(['/', '/index.html'], (_req, res) => res.sendFile('index.html', { root: staticRoot }));
+app.get(['/app.js', '/styles.css', '/hero-training.png'], (req, res) => res.sendFile(req.path.slice(1), { root: staticRoot, dotfiles: 'deny' }));
+app.get('/assets/:asset', (req, res) => res.sendFile(`assets/${req.params.asset}`, { root: staticRoot, dotfiles: 'deny' }));
 app.use('/api', (_req, res) => fail(res, 404, 'Маршрут API не найден.'));
 app.use((error, _req, res, _next) => {
   console.error(error);
