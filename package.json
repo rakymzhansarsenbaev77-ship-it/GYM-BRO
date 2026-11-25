@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node scripts/build-public.mjs",
     "dev": "node --watch server.js",
     "start": "node server.js",
     "prisma:generate": "prisma generate",

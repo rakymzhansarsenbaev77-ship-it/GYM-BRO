@@ -428,4 +428,8 @@ app.use((error, _req, res, _next) => {
   return fail(res, 500, 'Внутренняя ошибка сервера.');
 });
 
-app.listen(port, () => console.log(`ELITE / ONE running at http://localhost:${port}`));
+if (!process.env.VERCEL) {
+  app.listen(port, () => console.log(`ELITE / ONE running at http://localhost:${port}`));
+}
+
+export default app;
