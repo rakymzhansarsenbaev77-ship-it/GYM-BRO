@@ -419,6 +419,7 @@ app.get('/api/exercises', requireAuth, async (_req, res, next) => {
 // Hash navigation keeps all browser routes on '/', so this small allow-list is sufficient.
 app.get(['/', '/index.html'], (_req, res) => res.sendFile('index.html', { root: process.cwd() }));
 app.get(['/app.js', '/styles.css', '/hero-training.png'], (req, res) => res.sendFile(req.path.slice(1), { root: process.cwd(), dotfiles: 'deny' }));
+app.get('/assets/:asset', (req, res) => res.sendFile(`assets/${req.params.asset}`, { root: process.cwd(), dotfiles: 'deny' }));
 app.use('/api', (_req, res) => fail(res, 404, 'Маршрут API не найден.'));
 app.use((error, _req, res, _next) => {
   console.error(error);
