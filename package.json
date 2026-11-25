@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-public.mjs",
+    "build": "prisma generate && node scripts/build-public.mjs",
+    "postinstall": "prisma generate",
     "dev": "node --watch server.js",
     "start": "node server.js",
     "prisma:generate": "prisma generate",
@@ -28,6 +29,6 @@
     "prisma": "^6.7.0"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": "22.x"
   }
 }
